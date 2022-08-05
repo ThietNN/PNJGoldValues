@@ -13,6 +13,7 @@ namespace PNJGoldValue.Services
     public class DbHelper
     {
         private AppDbContext dbContext;
+        int i = 0;
         private DbContextOptions<AppDbContext> getAllOptions()
         {
             var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
@@ -23,7 +24,8 @@ namespace PNJGoldValue.Services
         {
             using (dbContext = new AppDbContext(getAllOptions()))
             {
-                var goldValues = dbContext.goldValues.ToList();
+                var goldValues = dbContext.goldValues.FromSqlRaw("SELECT * FROM goldValues WHERE [id] > (SELECT MAX([id]) - {0} FROM goldValues);", i).ToList();
+                i = 0;
                 if (goldValues != null)
                     return goldValues;
                 else
@@ -38,6 +40,7 @@ namespace PNJGoldValue.Services
                 foreach (GoldValue goldValue in goldValues)
                 {
                     dbContext.goldValues.Add(goldValue);
+                    i++;
                 }
                 dbContext.SaveChanges();       
             }
@@ -91,7 +94,8 @@ namespace PNJGoldValue.Services
                 var name = newList[0].Trim();
                 var buyPrice = newList[1].Trim();
                 var sellPrice = newList[2].Trim();
-                GoldValue goldValue = new GoldValue(name, buyPrice, sellPrice);
+                var datetime = DateTime.Now;
+                GoldValue goldValue = new GoldValue(name, buyPrice, sellPrice, datetime);
                 goldValues.Add(goldValue);
             }
             return goldValues;

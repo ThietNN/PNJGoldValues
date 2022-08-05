@@ -1,4 +1,4 @@
-using PNJGoldValue.Models;
+﻿using PNJGoldValue.Models;
 using PNJGoldValue.Services;
 
 namespace PNJGoldValue
@@ -19,20 +19,17 @@ namespace PNJGoldValue
             while (!stoppingToken.IsCancellationRequested)
             {
                 List<GoldValue> goldValues = dbHelper.GetGoldValues();
-                if (goldValues.Count == 0)
-                    dbHelper.addGoldValues("hn");
-                else
-                    printGoldValues(goldValues);
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(300000, stoppingToken);
+                dbHelper.addGoldValues("hn");
+                printGoldValues(goldValues);
+                await Task.Delay(5000, stoppingToken);
             }
         }
-
+        //300000
         private void printGoldValues (List<GoldValue> goldValues)
         {
             goldValues.ForEach((goldValue) =>
             {
-                _logger.LogInformation($"{goldValue.Name} | Gi� mua: {goldValue.BuyPrice} | Gi� b�n: {goldValue.SellPrice}");
+                _logger.LogInformation($"{goldValue.Name} | Giá mua: {goldValue.BuyPrice} | Giá bán: {goldValue.SellPrice} | Thời gian cập nhật: {goldValue.GetDateTime}");
             });
         }
     }

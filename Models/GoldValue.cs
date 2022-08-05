@@ -17,11 +17,14 @@ namespace PNJGoldValue.Models
         public string BuyPrice { get; set; }
         [Required]
         public string SellPrice { get; set; }
-        public GoldValue(string name, string buyPrice, string sellPrice)
+        [Required]
+        public DateTime GetDateTime { get; set; }
+        public GoldValue(string name, string buyPrice, string sellPrice, DateTime getDateTime)
         {
             Name = name;
             BuyPrice = buyPrice;
             SellPrice = sellPrice;
+            GetDateTime = getDateTime;
         }
     }
 }
