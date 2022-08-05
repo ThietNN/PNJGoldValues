@@ -21,10 +21,9 @@ namespace PNJGoldValue
                 List<GoldValue> goldValues = dbHelper.GetGoldValues();
                 dbHelper.addGoldValues("hn");
                 printGoldValues(goldValues);
-                await Task.Delay(5000, stoppingToken);
+                await Task.Delay(300000, stoppingToken);
             }
         }
-        //300000
         private void printGoldValues (List<GoldValue> goldValues)
         {
             goldValues.ForEach((goldValue) =>
